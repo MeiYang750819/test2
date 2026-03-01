@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>💼 勇者入職試煉</title>
+
+    <meta property="og:title" content="🛠️｜MYs系統｜新手村登入區" />
+    <meta property="og:description" content="闖關冒險即將開始！詳閱任務指南並完成關卡，解鎖職場新身分！" />
+    <meta property="og:image" content="https://MeiYang750819.github.io/test2/assets/img1/MYs_logo_去背1.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://MeiYang750819.github.io/test2/" />
+
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="nav.css">
     <script src="game-engine.js"></script>
@@ -11,7 +18,7 @@
         /* 🎯 關鍵修復點：針對第三頁覆寫 normal，防止原始碼空白破壞版面，同時保留與第一頁相同的完美寬鬆間距 */
         .details-body {
             white-space: normal !important; 
-            color: #e0e0e0; /* 避開純白，改用柔和淺灰 */
+            color: #b0b0b0; /* 內文文字調深一點，避免太亮 */
         }
 
         .task-target {
@@ -28,7 +35,7 @@
             margin-bottom: 10px; 
             cursor: pointer;
             font-size: 14px;
-            color: #d1d1d1; /* 內文亮度微調 */
+            color: #a0a0a0; /* 內文亮度微調 */
         }
 
         .check-item input[type="checkbox"] {
@@ -36,6 +43,18 @@
             width: 16px;
             height: 16px;
             flex-shrink: 0; 
+        }
+
+        /* 第二關「其他」改為底線樣式 */
+        .underline-input {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid #8ab4f8;
+            color: #fff;
+            width: 150px;
+            margin-left: 5px;
+            outline: none;
+            font-family: inherit;
         }
 
         /* 超連結樣式優化 */
@@ -192,13 +211,13 @@
             <div class="details-body">
                 <span class="task-target">
                     📣 任務目標 <br>
-                    　　- 確認已詳閱入職規範.<br>
-                    　　- 確保完全理解冒險指南內容.
+                    　　- 確認已詳閱入職規範<br>
+                    　　- 確保完全理解冒險指南內容
                 </span>
                 
                 <label class="check-item"><input type="checkbox" id="chk-guide"> 我已閱讀「📜 冒險指南」</label>
                 <label class="check-item"><input type="checkbox" id="chk-forge"> 我已閱讀「🏹 鍛造秘笈」</label>
-                <label class="check-item"><input type="checkbox" id="chk-risk"> 若被退件「 👤 本人承擔」</label>
+                <label class="check-item"><input type="checkbox" id="chk-risk"> 若被退件「👤 本人承擔」</label>
                 
                 <div class="action-center">
                     <button class="btn-confirm" id="btn-trial-1" onclick="checkTrial1(event)">✓ 完成新手報到</button>
@@ -212,14 +231,14 @@
             <div class="details-body">
                 <span class="task-target">
                     📣 任務目標 <br>
-                    　　- 確認現有證照與銀行帳戶.<br>
-                    　　- 若無下列文件亦可直接確認.
+                    　　- 確認現有證照與銀行帳戶<br>
+                    　　- 若無下列文件亦可直接確認
                 </span>
                 
                 <label class="check-item"><input type="checkbox"> 台新國際商業銀行-實體存摺</label>
                 <label class="check-item"><input type="checkbox"> 中餐證照</label>
                 <label class="check-item"><input type="checkbox"> 西餐證照</label>
-                <label class="check-item"><input type="checkbox"> 其他：<input type="text" class="check-input-text"></label>
+                <label class="check-item">其他：<input type="text" class="underline-input"></label>
                 
                 <div class="action-center">
                     <button class="btn-confirm" id="btn-trial-2" onclick="GameEngine.completeTrial(event, 2)">✓ 完成裝備盤點</button>
@@ -233,8 +252,8 @@
             <div class="details-body">
                 <span class="task-target">
                     📣 任務目標 <br>
-                    　　- 上傳入職五大必備文件.<br>
-                    　　- 確實填寫並追蹤體檢進度.
+                    　　- 上傳入職五大必備文件<br>
+                    　　- 確實填寫並追蹤體檢進度
                 </span>
                 
                 <label class="check-item"><input type="checkbox" class="chk-trial3"> 經認證醫療機構-勞工體格檢查報告</label>
@@ -282,8 +301,8 @@
             <div class="details-body">
                 <span class="task-target">
                     📣 任務目標 <br>
-                    　　- 確認物品與服裝規範.<br>
-                    　　- 當日未符規定會影響最終積極度總分.
+                    　　- 確認物品與服裝規範<br>
+                    　　- 當日未符規定會影響最終積極度總分
                 </span>
                 
                 <div style="background: rgba(251,191,36,0.1); padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #fbbf24;">
@@ -291,9 +310,9 @@
                     📍 報到地點：<span class="info-highlight" id="dyn-apt-loc">等待公會發布...</span>
                 </div>
 
-                <label class="check-item"><input type="checkbox" class="chk-trial4"> 確認當日服裝儀容規範.</label>
-                <label class="check-item"><input type="checkbox" class="chk-trial4"> 五大正本文件夾已備妥.</label>
-                <label class="check-item"><input type="checkbox" class="chk-trial4"> 確認報到時間與地點.</label>
+                <label class="check-item"><input type="checkbox" class="chk-trial4"> 確認當日服裝儀容規範</label>
+                <label class="check-item"><input type="checkbox" class="chk-trial4"> 五大正本文件夾已備妥</label>
+                <label class="check-item"><input type="checkbox" class="chk-trial4"> 確認報到時間與地點</label>
 
                 <div class="action-center">
                     <button class="btn-confirm" id="btn-trial-4" onclick="checkTrial4(event)">✓ 完成戰前準備</button>
@@ -307,8 +326,8 @@
             <div class="details-body">
                 <span class="task-target">
                     📣 任務目標 <br>
-                    　　- 勞工名卡填寫.<br>
-                    　　- 勞動契約查看並簽署.
+                    　　- 勞工名卡填寫<br>
+                    　　- 勞動契約查看並簽署
                 </span>
 
                 <a href="https://mys0819.github.io/LCS1/" target="_blank" class="external-link">🔗 點我開啟勞工名卡填寫表單</a>
@@ -325,8 +344,8 @@
             <div class="details-body">
                 <span class="task-target">
                     📣 任務目標 <br>
-                    　　- 待公會完成最後審核.<br>
-                    　　- 正式踏入榮耀殿堂.
+                    　　- 待公會完成最後審核<br>
+                    　　- 正式踏入榮耀殿堂
                 </span>
                 
                 <div class="action-center">
@@ -341,5 +360,52 @@
         <img src="assets/MYs_logo_去背.png" alt="MYs Logo" class="footer-logo">
         © Copyright 2026 MYs System-b1.0.0-03-02-2026-115
     </footer>
+
+    <script>
+        const fetchedData = { 
+            companyName: "FIZZ FIZZ.TAIPEI", 
+            team: "外場團隊", 
+            type: "兼職", 
+            userName: "測試員" 
+        };
+
+        function applyData(data) {
+            document.querySelectorAll('.dyn-company').forEach(el => el.innerText = data.companyName);
+            document.querySelectorAll('.dyn-team').forEach(el => el.innerText = data.team);
+            document.querySelectorAll('.dyn-type').forEach(el => el.innerText = data.type);
+            document.querySelectorAll('.dyn-name').forEach(el => el.innerText = data.userName);
+        }
+
+        window.addEventListener('load', () => {
+            applyData(fetchedData);
+            if (typeof GameEngine !== 'undefined') {
+                GameEngine.init();
+            }
+        });
+
+        function checkTrial1(e) {
+            const chk1 = document.getElementById('chk-guide').checked;
+            const chk2 = document.getElementById('chk-forge').checked;
+            const chk3 = document.getElementById('chk-risk').checked;
+            if (!chk1 || !chk2 || !chk3) {
+                alert("⚠️ 勇者請注意：必須勾選所有確認項目，才能推進！"); return;
+            }
+            GameEngine.completeTrial(e, 1);
+        }
+
+        function checkTrial3(e) {
+            const chks = document.querySelectorAll('.chk-trial3');
+            let all = true; chks.forEach(c => { if(!c.checked) all = false; });
+            if (!all) { alert("⚠️ 勇者請注意：前三項必備文件必須勾選完成，才能推進！"); return; }
+            GameEngine.completeTrial(e, 3);
+        }
+
+        function checkTrial4(e) {
+            const chks = document.querySelectorAll('.chk-trial4');
+            let all = true; chks.forEach(c => { if(!c.checked) all = false; });
+            if (!all) { alert("⚠️ 勇者請注意：必須勾選所有確認項目，才能推進！"); return; }
+            GameEngine.completeTrial(e, 4);
+        }
+    </script>
 </body>
 </html>
