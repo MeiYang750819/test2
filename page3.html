@@ -38,15 +38,18 @@
             flex-shrink: 0; 
         }
 
-        .check-input-text {
-            background: transparent;
-            border: none;
-            border-bottom: 1px solid #8ab4f8;
-            color: #fff;
-            width: 150px;
-            margin-left: 5px;
-            outline: none;
-            font-family: inherit;
+        /* 超連結樣式優化 */
+        .external-link {
+            color: #8ab4f8;
+            text-decoration: underline;
+            font-weight: bold;
+            margin: 10px 0;
+            display: inline-block;
+            transition: 0.3s;
+        }
+
+        .external-link:hover {
+            color: #4ade80;
         }
 
         /* 🕒 體檢進度追蹤區塊 */
@@ -148,11 +151,6 @@
             transition: all 0.3s ease;
         }
 
-        .btn-confirm:hover {
-            background: #4ade80;
-            color: #000;
-        }
-
         @media (max-width: 480px) {
             .date-row input[type="date"] { flex: 2.5; }
             .btn-lock { flex: 1; font-size: 13px; }
@@ -183,7 +181,7 @@
     <nav class="nav-tabs" style="top: 180px;">
         <a href="index.html" class="tab-btn">📜 冒險指南</a>
         <a href="page2.html" class="tab-btn">🏹 鍛造秘笈</a>
-        <a href="javascript:void(0)" class="tab-btn active">⚔️ 勇者試煉</a>
+        <a href="javascript:void(0)" onclick="location.reload();" class="tab-btn active">⚔️ 勇者試煉</a>
     </nav>
 
     <main class="tab-content active">
@@ -309,9 +307,11 @@
             <div class="details-body">
                 <span class="task-target">
                     📣 任務目標 <br>
-                    　　- 報到當日現場操作.<br>
-                    　　- 線上簽署正式僱傭契約.
+                    　　- 勞工名卡填寫.<br>
+                    　　- 勞動契約查看並簽署.
                 </span>
+
+                <a href="https://mys0819.github.io/LCS1/" target="_blank" class="external-link">🔗 點我開啟勞工名卡填寫表單</a>
                 
                 <div class="action-center">
                     <button class="btn-confirm" id="btn-trial-5" onclick="GameEngine.completeTrial(event, 5)">✓ 完成最終考驗</button>
@@ -341,40 +341,5 @@
         <img src="assets/MYs_logo_去背.png" alt="MYs Logo" class="footer-logo">
         © Copyright 2026 MYs System-b1.0.0-03-02-2026-115
     </footer>
-
-    <script>
-        const fetchedData = { companyName: "FIZZ FIZZ.TAIPEI", team: "外場團隊", type: "兼職", userName: "測試員" };
-        function applyData(data) {
-            document.querySelectorAll('.dyn-company').forEach(el => el.innerText = data.companyName);
-            document.querySelectorAll('.dyn-team').forEach(el => el.innerText = data.team);
-            document.querySelectorAll('.dyn-type').forEach(el => el.innerText = data.type);
-            document.querySelectorAll('.dyn-name').forEach(el => el.innerText = data.userName);
-        }
-        window.addEventListener('load', () => applyData(fetchedData));
-
-        function checkTrial1(e) {
-            const chk1 = document.getElementById('chk-guide').checked;
-            const chk2 = document.getElementById('chk-forge').checked;
-            const chk3 = document.getElementById('chk-risk').checked;
-            if (!chk1 || !chk2 || !chk3) {
-                alert("⚠️ 勇者請注意：必須勾選所有確認項目，才能推進！"); return;
-            }
-            GameEngine.completeTrial(e, 1);
-        }
-
-        function checkTrial3(e) {
-            const chks = document.querySelectorAll('.chk-trial3');
-            let all = true; chks.forEach(c => { if(!c.checked) all = false; });
-            if (!all) { alert("⚠️ 勇者請注意：前三項必備文件必須勾選完成，才能推進！"); return; }
-            GameEngine.completeTrial(e, 3);
-        }
-
-        function checkTrial4(e) {
-            const chks = document.querySelectorAll('.chk-trial4');
-            let all = true; chks.forEach(c => { if(!c.checked) all = false; });
-            if (!all) { alert("⚠️ 勇者請注意：必須勾選所有確認項目，才能推進！"); return; }
-            GameEngine.completeTrial(e, 4);
-        }
-    </script>
 </body>
 </html>
