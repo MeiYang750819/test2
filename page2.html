@@ -4,152 +4,63 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>💼 勇者入職試煉</title>
-    
+
     <meta property="og:title" content="🛠️｜MYs系統｜新手村登入區" />
     <meta property="og:description" content="闖關冒險即將開始！詳閱任務指南並完成關卡，解鎖職場新身分！" />
-    <meta property="og:image" content="https://mys0819.github.io/MYs/assets/img1/MYs_logo_去背1.png" />
+    <meta property="og:image" content="https://MeiYang750819.github.io/test2/assets/img1/MYs_logo_去背1.png" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://mys0819.github.io/OCS/" />
+    <meta property="og:url" content="https://MeiYang750819.github.io/test2/" />
 
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="nav.css">
-    <script src="game-engine.js"></script>
 </head>
 <body class="page-2">
-
-    <div id="lightbox" onclick="this.style.display='none'">
-        <img id="lightbox-img" src="">
-    </div>
 
     <div class="sticky-bar" id="block-identity">
         <span class="dyn-company">載入中...</span>　｜　<span class="dyn-team">載入中...</span>　｜　<span class="dyn-type">載入中...</span>　｜　<span class="dyn-name">載入中...</span>
     </div>
 
-    <div class="sticky-bar" id="block-status-1" style="top: 45px;">
-        <span id="rank-text">載入中...</span>
-    </div>
 
-    <div class="sticky-bar" id="block-status-2" style="top: 90px;">
-        <span id="status-tag">載入中...</span>
-    </div>
-
-    <div class="sticky-bar" id="block-status-3" style="top: 135px;">
-        <span id="score-label" style="color:#ff8a8a;">🏆 冒險積分：</span><span id="score-text">0分</span>
-        <div class="progress-track">
-            <div class="progress-fill" id="score-fill" style="width: 0%;"></div>
-        </div>　｜　<span id="prog-label" style="color:#ff8a8a;">⚔️ 攻略進度：</span><span id="prog-val">0%</span>
-        <div class="progress-track">
-            <div class="progress-fill" id="prog-fill" style="width: 0%;"></div>
-        </div>
-    </div>
-
-    <nav class="nav-tabs" style="top: 180px;">
+    <nav class="nav-tabs" style="top: 45px;">
         <a href="index.html" class="tab-btn">📜 冒險指南</a>
-        <a href="page2.html" class="tab-btn active">🏹 鍛造秘笈</a>
+        <a href="javascript:void(0)" onclick="location.reload();" class="tab-btn active">🏹 鍛造秘笈</a>
         <a href="page3.html" class="tab-btn">⚔️ 勇者試煉</a>
     </nav>
+
 
     <main class="tab-content active">
 
         <details>
-            <summary class="main-summary">⏫ 上傳檔案教學</summary>
-            <div class="details-body" style="white-space: normal;">
-                
-                <div style="white-space: pre-wrap; margin-bottom: 15px; color: var(--details-textColor);">■ 上傳個人準備文件,請務必參考正確及錯誤範例.
-■ 檔案須符合本公司限定規格.
-■ 若規格錯誤則退件再重新上傳.</div>
-
-                <strong style="display: block; font-size: 14px; color: var(--details-textColor); margin-bottom: 5px;">🍎 手機系統-IOS</strong>
-                <div style="white-space: pre-wrap; line-height: 1.8; font-weight: bold; color: var(--details-textColor); background: var(--sample-boxBgColor); padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 1px 3px rgba(0,0,0,0.3);">點擊備忘錄
-↓
-點擊右下角
-↓
-點擊相機圖示
-↓
-點擊掃描文件  
-↓
-開始掃描
-↓
-存檔雲端上傳</div>
-
-                <strong style="display: block; font-size: 14px; color: var(--details-textColor); margin-bottom: 5px;">🤖 手機系統-Android</strong>
-                <div style="white-space: pre-wrap; line-height: 1.8; font-weight: bold; color: var(--details-textColor); background: var(--sample-boxBgColor); padding: 15px; border-radius: 8px; margin-bottom: 5px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 1px 3px rgba(0,0,0,0.3);">點擊雲端硬碟
-↓
-點擊＋
-↓
-點擊掃描文件
-↓
-開始掃描
-↓
-存檔雲端上傳</div>
-
-            </div>
+            <summary class="main-summary">📸 掃描鍛造指南</summary>
+            <div class="details-body">■ 為了確保您的裝備（文件）能夠通過公會鑑定，請遵守以下規範：
+    1. 光線充足，避免陰影遮擋文字。
+    2. 文件四角必須完整入鏡，不可裁切。
+    3. 背景乾淨，避免手指或雜物干擾。
+    4. 確保文字清晰不模糊。</div>
         </details>
+
 
         <details>
-            <summary class="main-summary" onclick="GameEngine.unlock(event, 'pg2-m-1', '範例對照區域', 2)">👀 範例對照區域</summary>
-            <div class="details-body" style="white-space: normal;">
-                <strong style="display: block; font-size: 14px; color: var(--details-textColor); margin-bottom: 8px;">📹 iPhone備忘錄掃描文件操作示範</strong>
-                <figure class="sample-box" style="margin-top: 0; margin-bottom: 15px; padding: 5px;">
-                    <video controls preload="metadata" style="max-width: 100%; border-radius: 4px; display: block;">
-                        <source src="assets/ios掃描範例.mp4" type="video/mp4">
-                    </video>
-                </figure>
-                
-                <div style="margin-top: 5px; margin-bottom: 10px; font-weight: bold; color: var(--text-green);">以下為 ✅ 正確範例對照</div>
-                <div class="horizontal-scroll">
-                    <figure class="sample-box" onclick="zoomImg(this)">
-                        <img class="sample-img" src="assets/體檢報告範本.jpg" alt="❗️體檢報告範本.jpg">
-                        <figcaption class="sample-cap">✅ 正確範例-體檢報告上傳規格</figcaption>
-                    </figure>
-                    <figure class="sample-box" onclick="zoomImg(this)">
-                        <img class="sample-img" src="assets/身分證範本-正面.jpg" alt="❗️身分證範本-正面.jpg">
-                        <figcaption class="sample-cap">✅ 正確範例-身分證正面範本</figcaption>
-                    </figure>
-                    <figure class="sample-box" onclick="zoomImg(this)">
-                        <img class="sample-img" src="assets/身分證範本-背面.png" alt="❗️身分證範本-背面.png">
-                        <figcaption class="sample-cap">✅ 正確範例-身分證背面範本</figcaption>
-                    </figure>
-                    <figure class="sample-box" onclick="zoomImg(this)">
-                        <img class="sample-img" src="assets/薪酬銀行範本.jpg" alt="❗️薪酬銀行範本.jpg">
-                        <figcaption class="sample-cap">✅ 正確範例-薪資戶頭範本</figcaption>
-                    </figure>
-                </div>
-                
-                <div style="margin-top: 15px; margin-bottom: 10px; font-weight: bold; color: var(--text-red);">以下為 ❌ 錯誤範例對照</div>
-                <div class="horizontal-scroll">
-                    <figure class="sample-box" onclick="zoomImg(this)">
-                        <img class="sample-img" src="assets/錯誤範例-1.jpg" alt="❗️錯誤範例-1.jpg">
-                        <figcaption class="sample-cap">❌ 錯誤範例-需要好閱讀</figcaption>
-                    </figure>
-                    <figure class="sample-box" onclick="zoomImg(this)">
-                        <img class="sample-img" src="assets/錯誤範例-2.jpg" alt="❗️錯誤範例-2.jpg">
-                        <figcaption class="sample-cap">❌ 錯誤範例-四角未對四個角</figcaption>
-                    </figure>
-                    <figure class="sample-box" onclick="zoomImg(this)">
-                        <img class="sample-img" src="assets/錯誤範例-3.jpg" alt="❗️錯誤範例-3.jpg">
-                        <figcaption class="sample-cap">❌ 錯誤範例-有小手手入鏡</figcaption>
-                    </figure>
-                    <figure class="sample-box" onclick="zoomImg(this)">
-                        <img class="sample-img" src="assets/戶頭錯誤範例.jpg" alt="❗️戶頭錯誤範例.jpg">
-                        <figcaption class="sample-cap">❌ 錯誤範例-需要好閱讀</figcaption>
-                    </figure>
-                </div>
-            </div>
+            <summary class="main-summary">🗡️ 武器選擇 (職業導向)</summary>
+            <div class="details-body">■ 根據您的志向，請於「勇者試煉」中選擇對應武器：
+    - 🗡️ 劍士：追求極致穩定的力量。
+    - 🏹 弓箭手：靈活應變的遠程支援。
+    - 🔱 槍兵：堅毅不拔的防禦核心。</div>
         </details>
+
     </main>
 
     <footer class="footer">
         <img src="assets/MYs_logo_去背.png" alt="MYs Logo" class="footer-logo">
-        © Copyright 2026 MYs System-b1.0.0-02-22-2026-115
+        © Copyright 2026 MYs System-b1.0.0-03-02-2026-115
     </footer>
 
     <script>
-        const fetchedData = {
+        const fetchedData = { 
             companyName: "FIZZ FIZZ.TAIPEI", 
-            team: "外場團隊",
-            type: "兼職",
-            userName: "測試員"
+            team: "外場團隊", 
+            type: "兼職", 
+            userName: "測試員" 
         };
 
         function applyData(data) {
@@ -159,15 +70,9 @@
             document.querySelectorAll('.dyn-name').forEach(el => el.innerText = data.userName);
         }
 
-        function zoomImg(el) {
-            const img = el.querySelector('img');
-            if(img) {
-                document.getElementById('lightbox-img').src = img.src;
-                document.getElementById('lightbox').style.display = 'flex';
-            }
-        }
-
-        window.onload = () => { applyData(fetchedData); };
+        window.addEventListener('load', () => {
+            applyData(fetchedData);
+        });
     </script>
 </body>
 </html>
