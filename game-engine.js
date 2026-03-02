@@ -1,6 +1,5 @@
 /* ================================================================
-   【 ⚙️ GAME ENGINE - 最終修復全功能版 】
-   包含：金色飄浮文字、頂部閃爍、隨機武器、大/小摺疊加分
+   【 ⚙️ GAME ENGINE - 最終完美版 】
    ================================================================ */
 const GameEngine = {
     state: {
@@ -73,10 +72,10 @@ const GameEngine = {
             }
             @keyframes shinyUpdate {
                 0% { filter: brightness(1); transform: scale(1); }
-                50% { filter: brightness(1.8); transform: scale(1.05); color: #4ade80; }
+                50% { filter: brightness(1.8); transform: scale(1.05); color: #4ade80; text-shadow: 0 0 10px #4ade80; }
                 100% { filter: brightness(1); transform: scale(1); }
             }
-            .shiny-effect { animation: shinyUpdate 0.8s ease-in-out; }
+            .shiny-effect { animation: shinyUpdate 0.8s ease-in-out; display: inline-block; }
             .game-toast {
                 position: fixed; bottom: 20px; right: -300px;
                 background: #1a1a1a; color: #efefef; border: 1px solid #fbbf24;
@@ -85,28 +84,39 @@ const GameEngine = {
                 box-shadow: 0 5px 15px rgba(0,0,0,0.5); font-weight: bold;
             }
             .game-toast.show { right: 20px; }
+            /* 靜態漸層進度條 */
+            .progress-fill { background: linear-gradient(90deg, #ff4d4d 0%, #fbbf24 50%, #4ade80 100%) !important; }
         `;
         document.head.appendChild(style);
     },
 
-    // 💰 核心加分與通知邏輯
-    unlock(event, id, action, scoreGain) {
+    // 💰 解鎖機制 (大摺疊、小摺疊、隱藏武器)
+    unlock(event, id, action) {
         if (this.state.achievements.includes(id)) return;
         
+        let scoreGain = 0;
         let toastMsg = "";
+        let alertMsg = "";
         
-        if (action === 'random_weapon') {
+        if (action === 'large_fold') {
+            scoreGain = 2;
+            alertMsg = `🔔 發現隱藏關卡，冒險積分 +${scoreGain}`;
+        } else if (action === 'explore1') {
+            scoreGain = 1;
+            toastMsg = `✨ 深入探索，冒險積分+${scoreGain}`;
+        } else if (action === 'explore2') {
+            scoreGain = 1;
+            toastMsg = `🧩 探索重要情報，冒險積分 +${scoreGain}`;
+        } else if (action === 'random_weapon') {
+            scoreGain = 5;
             const weapons = ['🗡️ 精鋼短劍', '🏹 獵人短弓', '🔱 鐵尖長槍'];
             const w = weapons[Math.floor(Math.random() * weapons.length)];
             this.state.weaponType = w;
             this.state.items.push(w);
             toastMsg = `⚔️ 獲得武器：${w}，戰力大幅提升！`;
-        } else if (action === 'large_fold') {
-            alert(`🔔 發現隱藏關卡，冒險積分 +${scoreGain}`);
-            toastMsg = `✨ 成功探索重要情報，冒險積分 +${scoreGain}`;
-        } else {
-            toastMsg = `✨ 深入探索，冒險積分+${scoreGain}`;
         }
+
+        if (alertMsg) { alert(alertMsg); }
 
         this.createFloatingText(event, `+${scoreGain}`);
         this.state.achievements.push(id);
@@ -114,7 +124,7 @@ const GameEngine = {
         this.save();
         
         setTimeout(() => {
-            this.showToast(toastMsg);
+            if (toastMsg) this.showToast(toastMsg);
             this.triggerShiny();
             this.updateUI();
         }, 1000);
@@ -188,23 +198,29 @@ const GameEngine = {
         const b1 = document.getElementById('btn-lock-exam');
         if (d1 && b1) {
             d1.value = this.state.examDate || "";
-            if (this.state.examDateLocked) { d1.disabled = true; b1.innerText = "鎖定"; b1.disabled = true; }
+            if (this.state.examDateLocked) { d1.disabled = true; b1.innerText = "已鎖定"; b1.disabled = true; }
         }
         const d2 = document.getElementById('input-result-date');
         const b2 = document.getElementById('btn-lock-result');
         if (d2 && b2) {
             d2.value = this.state.resultDate || "";
-            if (this.state.resultDateLocked) { d2.disabled = true; b2.innerText = "鎖定"; b2.disabled = true; }
+            if (this.state.resultDateLocked) { d2.disabled = true; b2.innerText = "已鎖定"; b2.disabled = true; }
         }
     },
 
     lockDate(type) {
         const id = type === 'exam' ? 'input-exam-date' : 'input-result-date';
         const val = document.getElementById(id).value;
-        if (!val) return;
+        if (!val) { alert("請先選擇日期！"); return; }
+        
+        const confirmLock = confirm("鎖定就不能更改，確定要鎖定嗎？");
+        if (!confirmLock) return;
+
         if (type === 'exam') { this.state.examDate = val; this.state.examDateLocked = true; }
         else { this.state.resultDate = val; this.state.resultDateLocked = true; }
-        this.save(); this.updateUI();
+        this.save(); 
+        this.updateUI();
+        alert("鎖定就不能更改！");
     },
 
     requestChange() {
