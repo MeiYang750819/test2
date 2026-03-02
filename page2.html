@@ -59,7 +59,7 @@
 ■ 檔案須符合本公司限定規格.
 ■ 若規格錯誤則退件再重新上傳.</div>
 
-                <strong style="display: block; font-size: 14px; color: #fbbf24; margin-bottom: 5px; cursor: pointer;" onclick="GameEngine.unlock(event, 'weapon_random', 'random_weapon', 5)">🍎 手機系統-IOS (點擊開啟行囊)</strong>
+                <strong style="display: block; font-size: 14px; color: var(--details-textColor); margin-bottom: 5px;">🍎 手機系統-IOS</strong>
                 <div style="white-space: pre-wrap; line-height: 1.8; font-weight: bold; color: var(--details-textColor); background: var(--sample-boxBgColor); padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 1px 3px rgba(0,0,0,0.3);">點擊備忘錄
 ↓
 點擊右下角
@@ -73,7 +73,7 @@
 存檔雲端上傳</div>
 
                 <strong style="display: block; font-size: 14px; color: var(--details-textColor); margin-bottom: 5px;">🤖 手機系統-Android</strong>
-                <div style="white-space: pre-wrap; line-height: 1.8; font-weight: bold; color: var(--details-textColor); background: var(--sample-boxBgColor); padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 1px 3px rgba(0,0,0,0.3);">點擊雲端硬碟
+                <div style="white-space: pre-wrap; line-height: 1.8; font-weight: bold; color: var(--details-textColor); background: var(--sample-boxBgColor); padding: 15px; border-radius: 8px; margin-bottom: 5px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 1px 3px rgba(0,0,0,0.3);">點擊雲端硬碟
 ↓
 點擊＋
 ↓
@@ -87,7 +87,7 @@
         </details>
 
         <details>
-            <summary class="main-summary" onclick="GameEngine.unlock(event, 'pg2-m-1', 'large_fold', 2)">👀 範例對照區域</summary>
+            <summary class="main-summary" onclick="GameEngine.unlock(event, 'pg2-m-1', 'large_fold')">👀 範例對照區域</summary>
             <div class="details-body" style="white-space: normal;">
                 <strong style="display: block; font-size: 14px; color: var(--details-textColor); margin-bottom: 8px;">📹 iPhone備忘錄掃描文件操作示範</strong>
                 <figure class="sample-box" style="margin-top: 0; margin-bottom: 15px; padding: 5px;">
@@ -167,6 +167,7 @@
             }
         }
 
+        /* 🎯 修正點：確保頂部戰力資訊與進度條同步初始化 */
         window.addEventListener('load', () => { 
             applyData(fetchedData); 
             if (typeof GameEngine !== 'undefined') {
