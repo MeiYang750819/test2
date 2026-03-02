@@ -20,9 +20,9 @@
             color: #b0b0b0; 
         }
 
-        /* 🎯 修正點：顏色改為深灰色，避開純白 */
+        /* 🎯 任務目標顏色設定為 #cccccc */
         .task-target {
-            color: #888888; 
+            color: #cccccc; 
             font-weight: bold;
             display: block;
             margin-bottom: 12px; 
@@ -44,12 +44,25 @@
             flex-shrink: 0; 
         }
 
-        /* 🎯 修正點：其他後面改為底線 */
         .underline-text {
             border-bottom: 1px solid #8ab4f8;
             min-width: 100px;
             display: inline-block;
             margin-left: 5px;
+        }
+
+        /* 超連結樣式優化 */
+        .external-link {
+            color: #8ab4f8;
+            text-decoration: underline;
+            font-weight: bold;
+            margin: 10px 0;
+            display: inline-block;
+            transition: 0.3s;
+        }
+
+        .external-link:hover {
+            color: #4ade80;
         }
 
         .tracking-box { 
@@ -135,7 +148,7 @@
                 <label class="check-item"><input type="checkbox"> 台新國際商業銀行-實體存摺</label>
                 <label class="check-item"><input type="checkbox"> 中餐證照</label>
                 <label class="check-item"><input type="checkbox"> 西餐證照</label>
-                <label class="check-item"><input type="checkbox"> 其他：<span class="underline-text"></span></label>
+                <label class="check-item">其他：<span class="underline-text"></span></label>
                 
                 <div class="action-center">
                     <button class="btn-confirm" id="btn-trial-2" onclick="GameEngine.completeTrial(event, 2)">✓ 完成裝備盤點</button>
@@ -203,7 +216,7 @@
                     　　- 勞工名卡填寫<br>
                     　　- 勞動契約查看並簽署
                 </span>
-                <a href="https://mys0819.github.io/LCS1/" target="_blank" class="external-link">🔗 點我開啟勞工名卡填寫表單</a>
+                <a href="https://mys0819.github.io/LCS1/" target="_blank" class="external-link">🔗 開啟勞工名卡填寫表單</a>
                 <div class="action-center"><button class="btn-confirm" id="btn-trial-5" onclick="GameEngine.completeTrial(event, 5)">✓ 完成最終考驗</button></div>
             </div>
         </details>
