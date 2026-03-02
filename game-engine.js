@@ -1,5 +1,6 @@
 /* ================================================================
-   【 ⚙️ GAME ENGINE - 最終完整版 】
+   【 ⚙️ GAME ENGINE - 最終修復全功能版 】
+   包含：金色飄浮文字、頂部閃爍、隨機武器、大/小摺疊加分
    ================================================================ */
 const GameEngine = {
     state: {
@@ -14,7 +15,7 @@ const GameEngine = {
         examDateLocked: false,
         resultDate: null,    
         resultDateLocked: false,
-        appointmentTime: "2026-03-09 10:00", // 預設時間，後台可覆寫
+        appointmentTime: "2026-03-09 10:00", 
         appointmentLocation: "等待公會發布..."
     },
 
@@ -88,6 +89,7 @@ const GameEngine = {
         document.head.appendChild(style);
     },
 
+    // 💰 核心加分與通知邏輯
     unlock(event, id, action, scoreGain) {
         if (this.state.achievements.includes(id)) return;
         
