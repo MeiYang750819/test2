@@ -10,9 +10,7 @@
 </head>
 <body class="page-2">
 
-    <div id="lightbox" onclick="this.style.display='none'">
-        <img id="lightbox-img" src="">
-    </div>
+    <div id="lightbox" onclick="this.style.display='none'"><img id="lightbox-img" src=""></div>
 
     <div class="sticky-bar" id="block-identity">
         <span class="dyn-company">載入中...</span>　｜　
@@ -32,10 +30,8 @@
     </div>
 
     <div class="sticky-bar" id="block-status-3" style="top: 135px;">
-        <span style="color:#ff8a8a;">🏆 冒險積分：</span><span id="score-val">0分</span>
-        <div class="progress-track">
-            <div class="progress-fill" id="score-fill" style="width: 0%;"></div>
-        </div>
+        <span id="score-label" style="color:#ff8a8a;">🏆 冒險積分：</span><span id="score-val">0分</span>
+        <div class="progress-track"><div class="progress-fill" id="score-fill" style="width: 0%;"></div></div>
     </div>
 
     <nav class="nav-tabs" style="top: 180px;">
@@ -49,7 +45,6 @@
         <details>
             <summary class="main-summary">⏫ 上傳檔案教學</summary>
             <div class="details-body" style="white-space: normal;">
-                
                 <div style="margin-bottom: 15px;">
                     ■ 上傳個人準備文件, 請務必參考正確及錯誤範例.<br>
                     ■ 檔案須符合本公司限定規格.<br>
@@ -62,17 +57,14 @@
                     2. 點擊右下角「新增」圖示<br>
                     3. 點擊「相機」圖示<br>
                     4. 點擊「掃描文件」<br>
-                    5. 開始掃描並存檔<br>
-                    6. 存檔至雲端後上傳
+                    5. 開始掃描並存檔上傳
                 </div>
 
                 <strong style="display: block; font-size: 14px; margin-top: 15px; margin-bottom: 8px;">🤖 手機系統-Android</strong>
                 <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; line-height: 2;">
                     1. 點擊「雲端硬碟」<br>
                     2. 點擊右下角「＋」圖示<br>
-                    3. 點擊「掃描」圖示<br>
-                    4. 掃描後點擊「完成」<br>
-                    5. 檔案存檔後進行上傳
+                    3. 點擊「掃描」圖示並開始
                 </div>
             </div>
         </details>
@@ -93,10 +85,6 @@
                         <img src="assets/體檢報告範本.jpg">
                         <figcaption>✅ 正確規格範本</figcaption>
                     </figure>
-                    <figure class="sample-box" onclick="zoomImg(this)">
-                        <img src="assets/身分證範本-正面.jpg">
-                        <figcaption>✅ 身分證正面</figcaption>
-                    </figure>
                 </div>
 
                 <div style="margin: 20px 0 10px; font-weight: bold; color: #ff8a8a;">❌ 以下為錯誤範例對照</div>
@@ -105,19 +93,14 @@
                         <img src="assets/錯誤範例-1.jpg">
                         <figcaption>❌ 錯誤範例-文字模糊</figcaption>
                     </figure>
-                    <figure class="sample-box" onclick="zoomImg(this)">
-                        <img src="assets/錯誤範例-2.jpg">
-                        <figcaption>❌ 錯誤範例-四角殘缺</figcaption>
-                    </figure>
                 </div>
             </div>
         </details>
-
     </main>
 
     <footer class="footer">
         <img src="assets/MYs_logo_去背.png" alt="MYs Logo" class="footer-logo">
-        © Copyright 2026 MYs System
+        © 2026 MYs System
     </footer>
 
     <script>
@@ -130,10 +113,7 @@
         }
         function zoomImg(el) { 
             const img = el.querySelector('img'); 
-            if(img) { 
-                document.getElementById('lightbox-img').src = img.src; 
-                document.getElementById('lightbox').style.display = 'flex'; 
-            } 
+            if(img) { document.getElementById('lightbox-img').src = img.src; document.getElementById('lightbox').style.display = 'flex'; } 
         }
         window.addEventListener('load', () => { applyData(fetchedData); GameEngine.init(); });
     </script>
