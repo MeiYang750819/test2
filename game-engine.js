@@ -1,6 +1,5 @@
 /* ================================================================
-   【 ⚙️ GAME ENGINE - 遊戲化互動完整版 】
-   包含：飄浮文字、大/小摺疊通知、隨機武器、閃爍更新
+   【 ⚙️ GAME ENGINE - 最終完整版 】
    ================================================================ */
 const GameEngine = {
     state: {
@@ -15,7 +14,7 @@ const GameEngine = {
         examDateLocked: false,
         resultDate: null,    
         resultDateLocked: false,
-        appointmentTime: "等待公會發布...", 
+        appointmentTime: "2026-03-09 10:00", // 預設時間，後台可覆寫
         appointmentLocation: "等待公會發布..."
     },
 
@@ -68,7 +67,7 @@ const GameEngine = {
             }
             .floating-text {
                 position: fixed; pointer-events: none; color: #fbbf24;
-                font-weight: bold; font-size: 24px; text-shadow: 0 0 10px rgba(251,191,36,0.8);
+                font-weight: bold; font-size: 28px; text-shadow: 0 0 10px rgba(251,191,36,0.8);
                 z-index: 10000; animation: floatUp 1.5s forwards;
             }
             @keyframes shinyUpdate {
@@ -89,13 +88,9 @@ const GameEngine = {
         document.head.appendChild(style);
     },
 
-    // 💰 解鎖機制 (大摺疊、小摺疊、隱藏武器)
     unlock(event, id, action, scoreGain) {
         if (this.state.achievements.includes(id)) return;
         
-        // 1. 飄浮文字
-        this.createFloatingText(event, `+${scoreGain}`);
-
         let toastMsg = "";
         
         if (action === 'random_weapon') {
@@ -111,11 +106,11 @@ const GameEngine = {
             toastMsg = `✨ 深入探索，冒險積分+${scoreGain}`;
         }
 
+        this.createFloatingText(event, `+${scoreGain}`);
         this.state.achievements.push(id);
         this.state.score += scoreGain;
         this.save();
         
-        // 觸發通知與 UI 更新
         setTimeout(() => {
             this.showToast(toastMsg);
             this.triggerShiny();
@@ -153,7 +148,7 @@ const GameEngine = {
             const el = document.getElementById(id);
             if (el) {
                 el.classList.remove('shiny-effect');
-                void el.offsetWidth; // 重新觸發動畫
+                void el.offsetWidth;
                 el.classList.add('shiny-effect');
             }
         });
@@ -170,19 +165,20 @@ const GameEngine = {
         
         const scoreEl = document.getElementById('score-text');
         if (scoreEl) scoreEl.innerText = this.state.score + "分";
-        
         const scoreFill = document.getElementById('score-fill');
         if (scoreFill) scoreFill.style.width = Math.min(this.state.score, 100) + "%";
 
         const baseProg = this.state.currentTrial > 0 ? this.trialsData[this.state.currentTrial].baseProg : 0;
         const currentProg = Math.min(100, baseProg + (this.state.achievements.length * 2));
-        
         const progVal = document.getElementById('prog-val');
         if (progVal) progVal.innerText = currentProg + "%";
         const progFill = document.getElementById('prog-fill');
         if (progFill) progFill.style.width = currentProg + "%";
 
         this.updateDateControls();
+        const timeEl = document.getElementById('dyn-apt-time');
+        if (timeEl) timeEl.innerText = this.state.appointmentTime;
+        this.updateButtonStyles();
     },
 
     updateDateControls() {
@@ -217,13 +213,35 @@ const GameEngine = {
         if (btn) { btn.disabled = true; btn.innerText = "申請"; btn.style.opacity = "0.5"; }
     },
 
+    canUnlockTrial5() {
+        if (!this.state.appointmentTime || this.state.appointmentTime.includes("等待")) return { can: false, reason: "⚠️ 尚未發布報到時間。" };
+        const now = new Date();
+        const aptDate = new Date(this.state.appointmentTime);
+        const openTime = new Date(aptDate.getFullYear(), aptDate.getMonth(), aptDate.getDate(), 8, 0, 0);
+        if (now < openTime) return { can: false, reason: `⚠️ 請於報到日 (${aptDate.toLocaleDateString()}) 08:00 後操作。` };
+        return { can: true };
+    },
+
     completeTrial(event, trialNum) {
         if (this.state.currentTrial >= trialNum) return;
+        if (trialNum === 5 && !this.canUnlockTrial5().can) { alert(this.canUnlockTrial5().reason); return; }
         const tData = this.trialsData[trialNum];
         this.state.currentTrial = trialNum;
         this.state.location = tData.loc;
         this.state.score += tData.scoreGain;
         this.save(); this.updateUI();
+    },
+
+    updateButtonStyles() {
+        const trials = [1, 2, 3, 4, 5, 6];
+        trials.forEach(n => {
+            const btn = document.getElementById(`btn-trial-${n}`);
+            if (!btn) return;
+            if (this.state.currentTrial >= n) {
+                btn.disabled = true;
+                btn.innerText = n === 3 ? "📝 已提交裝備" : n === 6 ? "👑 已完成榮耀" : "✓ 已完成試煉";
+            }
+        });
     }
 };
 window.addEventListener('load', () => GameEngine.init());
