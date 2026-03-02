@@ -1,5 +1,5 @@
 /* ================================================================
-   【 ⚙️ GAME ENGINE - 最終完美修訂版 】
+   【 ⚙️ GAME ENGINE - 靈魂回歸最終全本 】
    ================================================================ */
 const GameEngine = {
     state: {
@@ -101,15 +101,15 @@ const GameEngine = {
         if (action === 'large_fold') {
             scoreGain = 2;
             alertMsg = `🔔 發現隱藏關卡，冒險積分 +2`;
-        } else if (action === 'onboard_files') {
-            scoreGain = 3;
-            toastMsg = `✨ 整理重要文件，冒險積分 +3`;
         } else if (action === 'explore1') {
             scoreGain = 1;
             toastMsg = `✨ 深入探索，冒險積分+1`;
         } else if (action === 'explore2') {
             scoreGain = 1;
             toastMsg = `🧩 探索重要情報，冒險積分 +1`;
+        } else if (action === 'onboard_files') {
+            scoreGain = 3;
+            toastMsg = `✨ 整理重要文件，冒險積分 +3`;
         } else if (action === 'random_weapon') {
             scoreGain = 5;
             const weapons = ['🗡️ 精鋼短劍', '🏹 獵人短弓', '🔱 鐵尖長槍'];
@@ -154,120 +154,4 @@ const GameEngine = {
         setTimeout(() => toast.classList.add('show'), 100);
         setTimeout(() => {
             toast.classList.remove('show');
-            setTimeout(() => toast.remove(), 500);
-        }, 3000); // 3秒滑出
-    },
-
-    triggerShiny(targetId) {
-        const el = document.getElementById(targetId);
-        if (el) {
-            el.classList.remove('shiny-effect');
-            void el.offsetWidth;
-            el.classList.add('shiny-effect');
-        }
-    },
-
-    save() { localStorage.setItem('hero_progress', JSON.stringify(this.state)); },
-
-    updateUI() {
-        const sortedRanks = [...this.ranks].sort((a,b) => b.min - a.min);
-        const rank = sortedRanks.find(r => this.state.score >= r.min) || this.ranks[this.ranks.length - 1];
-
-        const rankVal = document.getElementById('rank-val');
-        const locVal = document.getElementById('loc-val');
-        const itemsVal = document.getElementById('items-val');
-        const scoreVal = document.getElementById('score-val');
-        const progVal = document.getElementById('prog-val');
-
-        if (rankVal && rankVal.innerText !== rank.title) { rankVal.innerText = rank.title; this.triggerShiny('rank-val'); }
-        if (locVal && locVal.innerText !== this.state.location) { locVal.innerText = this.state.location; this.triggerShiny('loc-val'); }
-        if (itemsVal) itemsVal.innerText = this.state.items.join(' ');
-        if (scoreVal) scoreVal.innerText = this.state.score + "分";
-        
-        const scoreFill = document.getElementById('score-fill');
-        if (scoreFill) scoreFill.style.width = Math.min(this.state.score, 100) + "%";
-
-        const baseProg = this.state.currentTrial > 0 ? this.trialsData[this.state.currentTrial].baseProg : 0;
-        const currentProg = Math.min(100, baseProg + (this.state.achievements.length * 2));
-        if (progVal && progVal.innerText !== currentProg + "%") {
-            progVal.innerText = currentProg + "%";
-            this.triggerShiny('prog-val');
-        }
-        
-        const progFill = document.getElementById('prog-fill');
-        if (progFill) progFill.style.width = currentProg + "%";
-
-        this.updateDateControls();
-    },
-
-    updateDateControls() {
-        const d1 = document.getElementById('input-exam-date');
-        const b1 = document.getElementById('btn-lock-exam');
-        if (d1 && b1) {
-            d1.value = this.state.examDate || "";
-            if (this.state.examDateLocked) { d1.disabled = true; b1.innerText = "已鎖定"; b1.disabled = true; }
-        }
-        const d2 = document.getElementById('input-result-date');
-        const b2 = document.getElementById('btn-lock-result');
-        if (d2 && b2) {
-            d2.value = this.state.resultDate || "";
-            if (this.state.resultDateLocked) { d2.disabled = true; b2.innerText = "已鎖定"; b2.disabled = true; }
-        }
-    },
-
-    lockDate(type) {
-        const id = type === 'exam' ? 'input-exam-date' : 'input-result-date';
-        const val = document.getElementById(id).value;
-        if (!val) { alert("請先選擇日期！"); return; }
-        const confirmLock = confirm("鎖定就不能更改，確定要鎖定嗎？");
-        if (!confirmLock) return;
-
-        if (type === 'exam') { this.state.examDate = val; this.state.examDateLocked = true; }
-        else { this.state.resultDate = val; this.state.resultDateLocked = true; }
-        this.save(); 
-        this.updateUI();
-        alert("鎖定就不能更改！");
-    },
-
-    completeTrial(event, trialNum) {
-        if (this.state.currentTrial >= trialNum) return;
-        const tData = this.trialsData[trialNum];
-        this.state.currentTrial = trialNum;
-        this.state.location = tData.loc;
-        this.state.score += tData.scoreGain;
-        
-        this.triggerShiny('loc-val');
-        this.triggerShiny('items-val');
-        this.triggerShiny('score-val');
-
-        const currentArmor = this.state.items.find(i => this.armorPath.includes(i));
-        if (currentArmor) {
-            const idx = this.armorPath.indexOf(currentArmor);
-            if (idx < this.armorPath.length - 1) {
-                this.state.items = this.state.items.map(i => i === currentArmor ? this.armorPath[idx + 1] : i);
-            }
-        }
-        if (this.state.weaponType) {
-            const nextW = this.weaponPaths[this.state.weaponType];
-            if (nextW) {
-                this.state.items = this.state.items.map(i => i === this.state.weaponType ? nextW : i);
-                this.state.weaponType = nextW;
-            }
-        }
-        this.save();
-        this.updateUI();
-    },
-
-    updateButtonStyles() {
-        const trials = [1, 2, 3, 4, 5, 6];
-        trials.forEach(n => {
-            const btn = document.getElementById(`btn-trial-${n}`);
-            if (!btn) return;
-            if (this.state.currentTrial >= n) {
-                btn.disabled = true;
-                btn.innerText = n === 3 ? "📝 已提交裝備" : n === 6 ? "👑 已完成榮耀" : "✓ 已完成試煉";
-            }
-        });
-    }
-};
-window.addEventListener('load', () => GameEngine.init());
+            setTimeout(() => toast.remove(),
