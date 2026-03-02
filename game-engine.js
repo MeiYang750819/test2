@@ -1,5 +1,5 @@
 /* ================================================================
-   【 ⚙️ GAME ENGINE - 骷顱頭警示版 】
+   【 ⚙️ GAME ENGINE - 成就加分與通知完整版 】
    ================================================================ */
 const GameEngine = {
     state: {
@@ -7,7 +7,7 @@ const GameEngine = {
         items: ['👕 粗製布衣'],
         location: '⛺ 新手村',
         status: '📦 檢整裝備中',
-        achievements: [],
+        achievements: [],    // 儲存已獲得的成就 ID
         weaponType: null,
         currentTrial: 0,
         examDate: null,      
@@ -18,7 +18,7 @@ const GameEngine = {
         appointmentLocation: "等待公會發布..."
     },
 
-    // 🎯 修復點：將最低階級改為 💀
+    // 🏆 戰力階級 (包含 💀 骷顱頭)
     ranks: [
         { min: 101, title: "💎 SS級 神話級玩家" },
         { min: 96,  title: "🌟 S級 傳說級玩家" },
@@ -47,6 +47,7 @@ const GameEngine = {
         6: { baseProg: 90, loc: '👑 榮耀殿堂', scoreGain: 10 }
     },
 
+    // 🚀 初始化
     init() {
         try {
             const saved = localStorage.getItem('hero_progress');
@@ -56,6 +57,7 @@ const GameEngine = {
         } catch (e) {
             localStorage.removeItem('hero_progress');
         }
+        this.injectNotificationCSS();
         setTimeout(() => { this.updateUI(true); }, 50);
         setInterval(() => this.checkLateWarning(), 600000);
     },
@@ -67,6 +69,51 @@ const GameEngine = {
         location.reload();
     },
 
+    // 🔔 注入滑出通知的 CSS
+    injectNotificationCSS() {
+        if (document.getElementById('notify-style')) return;
+        const style = document.createElement('style');
+        style.id = 'notify-style';
+        style.innerHTML = `
+            .game-notify {
+                position: fixed; top: 20px; right: -300px; 
+                background: rgba(35, 42, 53, 0.95);
+                color: #4ade80; border: 1px solid #4ade80;
+                padding: 15px 25px; border-radius: 8px;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+                z-index: 9999; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                font-weight: bold; display: flex; align-items: center; gap: 10px;
+            }
+            .game-notify.show { right: 20px; }
+            .game-notify.bonus { border-color: #fbbf24; color: #fbbf24; }
+        `;
+        document.head.appendChild(style);
+    },
+
+    // 📣 顯示滑出通知
+    showNotification(msg, isBonus = false) {
+        const notify = document.createElement('div');
+        notify.className = `game-notify ${isBonus ? 'bonus' : ''}`;
+        notify.innerHTML = msg;
+        document.body.appendChild(notify);
+        setTimeout(() => notify.classList.add('show'), 100);
+        setTimeout(() => {
+            notify.classList.remove('show');
+            setTimeout(() => notify.remove(), 500);
+        }, 5000);
+    },
+
+    // 🏅 增加成就加分項目
+    addAchievement(id, bonusScore, msg) {
+        if (this.state.achievements.includes(id)) return;
+        this.state.achievements.push(id);
+        this.state.score += bonusScore;
+        this.showNotification(msg, true);
+        this.save();
+        this.updateUI();
+    },
+
+    // 📌 日期鎖定
     lockDate(type) {
         const id = type === 'exam' ? 'input-exam-date' : 'input-result-date';
         const val = document.getElementById(id).value;
@@ -80,9 +127,10 @@ const GameEngine = {
         }
         this.save();
         this.updateUI();
-        alert("📌 日期已鎖定，非經人資許可不得修改！");
+        this.showNotification("📌 日期已鎖定，鑑定中！");
     },
 
+    // 📌 申請更改
     requestChange() {
         const val = document.getElementById('input-change-date').value;
         if (!val) { alert("請選擇欲更改的日期！"); return; }
@@ -100,13 +148,14 @@ const GameEngine = {
             const today = new Date().toISOString().split('T')[0];
             if (today > this.state.examDate) {
                 const statusSpan = document.getElementById('dyn-status');
-                if (statusSpan) statusSpan.innerHTML = `<span class="text-red">💀 警告：體檢進度延宕</span>`;
+                if (statusSpan) statusSpan.innerHTML = `<span style="color:#ff8a8a;">💀 警告：體檢延宕</span>`;
                 return true;
             }
         }
         return false;
     },
 
+    // 🔒 報到日 08:00 開放檢查
     canUnlockTrial5() {
         if (!this.state.appointmentTime || this.state.appointmentTime.includes("等待")) {
             return { can: false, reason: "⚠️ 尚未發布報到時間，請聯繫人資。" };
@@ -115,29 +164,36 @@ const GameEngine = {
         const aptDate = new Date(this.state.appointmentTime);
         const openTime = new Date(aptDate.getFullYear(), aptDate.getMonth(), aptDate.getDate(), 8, 0, 0);
         if (now < openTime) {
-            return { can: false, reason: `⚠️ 任務尚未開啟。\n請於報到日 (${aptDate.toLocaleDateString()}) 早上 08:00 後再行操作。` };
+            return { can: false, reason: `⚠️ 任務尚未開啟。\n請於報到日 (${aptDate.toLocaleDateString()}) 早上 08:00 後操作。` };
         }
         return { can: true };
     },
 
     completeTrial(event, trialNum) {
-        if (this.state.currentTrial >= trialNum) { alert("⚠️ 此階段任務已完成，請繼續前進！"); return; }
-        if (trialNum > 1 && this.state.currentTrial < trialNum - 1) { alert("⚠️ 勿著急，請先完成前一個階段任務！"); return; }
+        if (this.state.currentTrial >= trialNum) return;
+        if (trialNum > 1 && this.state.currentTrial < trialNum - 1) {
+            alert("⚠️ 請按順序完成試煉！"); return;
+        }
         if (trialNum === 5) {
             const check = this.canUnlockTrial5();
             if (!check.can) { alert(check.reason); return; }
         }
+
         const tData = this.trialsData[trialNum];
         this.state.currentTrial = trialNum;
         this.state.location = tData.loc;
         this.state.score += tData.scoreGain;
+        
+        // 防具升級
         const currentArmor = this.state.items.find(i => this.armorPath.includes(i));
         if (currentArmor) {
-            const currentIndex = this.armorPath.indexOf(currentArmor);
-            if (currentIndex < this.armorPath.length - 1) {
-                this.state.items = this.state.items.map(i => i === currentArmor ? this.armorPath[currentIndex + 1] : i);
+            const idx = this.armorPath.indexOf(currentArmor);
+            if (idx < this.armorPath.length - 1) {
+                this.state.items = this.state.items.map(i => i === currentArmor ? this.armorPath[idx + 1] : i);
             }
         }
+
+        // 武器升級
         if (trialNum >= 3 && this.state.weaponType) {
             const nextW = this.weaponPaths[this.state.weaponType];
             if (nextW) {
@@ -145,8 +201,10 @@ const GameEngine = {
                 this.state.weaponType = nextW; 
             }
         }
+
         this.save();
         this.updateUI(true);
+        this.showNotification(`⚔️ 通關：${tData.loc}`);
     },
 
     updateUI(isInit = false) {
@@ -155,20 +213,27 @@ const GameEngine = {
         const sEl = document.getElementById('status-tag');
         if (rEl) rEl.innerHTML = `<span style="color:#fbbf24;">戰力：</span><span>${rank.title}</span>　｜　<span style="color:#fbbf24;">關卡：</span><span>${this.state.location}</span>`;
         if (sEl) sEl.innerHTML = `<span style="color:#8ab4f8;">道具：</span><span>${this.state.items.join(' ')}</span>　｜　<span style="color:#8ab4f8;">狀態：</span><span id="dyn-status">${this.state.status}</span>`;
-        document.getElementById('score-text').innerText = this.state.score + "分";
-        document.getElementById('score-fill').style.width = Math.min(this.state.score, 100) + "%";
-        const hiddenBonus = Math.min(10, this.state.achievements.length * 5);
+        
+        const scoreText = document.getElementById('score-text');
+        if (scoreText) scoreText.innerText = this.state.score + "分";
+        
+        const scoreFill = document.getElementById('score-fill');
+        if (scoreFill) scoreFill.style.width = Math.min(this.state.score, 100) + "%";
+
+        const bonus = this.state.achievements.length * 2; // 每個成就額外加 2% 進度
         const baseProg = this.state.currentTrial > 0 ? this.trialsData[this.state.currentTrial].baseProg : 0;
-        const currentProg = Math.min(100, baseProg + hiddenBonus);
-        document.getElementById('prog-val').innerText = currentProg + "%";
-        document.getElementById('prog-fill').style.width = currentProg + "%";
+        const currentProg = Math.min(100, baseProg + bonus);
+        
+        const progVal = document.getElementById('prog-val');
+        if (progVal) progVal.innerText = currentProg + "%";
+        
+        const progFill = document.getElementById('prog-fill');
+        if (progFill) progFill.style.width = currentProg + "%";
+
         this.updateDateControls();
         const timeEl = document.getElementById('dyn-apt-time');
-        const locEl = document.getElementById('dyn-apt-loc');
         if (timeEl) timeEl.innerText = this.state.appointmentTime;
-        if (locEl) locEl.innerText = this.state.appointmentLocation;
         this.updateButtonStyles();
-        this.checkLateWarning();
     },
 
     updateDateControls() {
@@ -176,13 +241,13 @@ const GameEngine = {
         const b1 = document.getElementById('btn-lock-exam');
         if (d1 && b1) {
             d1.value = this.state.examDate || "";
-            if (this.state.examDateLocked) { d1.disabled = true; b1.innerText = "鎖定"; b1.disabled = true; b1.style.opacity = "0.5"; }
+            if (this.state.examDateLocked) { d1.disabled = true; b1.innerText = "鎖定"; b1.disabled = true; }
         }
         const d2 = document.getElementById('input-result-date');
         const b2 = document.getElementById('btn-lock-result');
         if (d2 && b2) {
             d2.value = this.state.resultDate || "";
-            if (this.state.resultDateLocked) { d2.disabled = true; b2.innerText = "鎖定"; b2.disabled = true; b2.style.opacity = "0.5"; }
+            if (this.state.resultDateLocked) { d2.disabled = true; b2.innerText = "鎖定"; b2.disabled = true; }
         }
     },
 
@@ -194,9 +259,7 @@ const GameEngine = {
             if (this.state.currentTrial >= n) {
                 btn.disabled = true;
                 btn.style.opacity = "0.6";
-                if (n === 3) btn.innerText = "📝 已提交裝備";
-                else if (n === 6) btn.innerText = "👑 已完成榮耀";
-                else btn.innerText = "✓ 已完成試煉";
+                btn.innerText = n === 3 ? "📝 已提交裝備" : n === 6 ? "👑 已完成榮耀" : "✓ 已完成試煉";
             }
         });
     }
