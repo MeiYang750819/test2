@@ -1,5 +1,5 @@
 /* ================================================================
-   【 ⚙️ GAME ENGINE - 靈魂回歸最終版 】
+   【 ⚙️ GAME ENGINE - 最終完美修訂版 】
    ================================================================ */
 const GameEngine = {
     state: {
@@ -8,7 +8,7 @@ const GameEngine = {
         location: '⛺ 新手村',
         status: '📦 檢整裝備中',
         achievements: [],
-        weaponType: null, // 儲存獲得的初始武器名稱
+        weaponType: null,
         currentTrial: 0,
         examDate: null,      
         examDateLocked: false,
@@ -18,7 +18,6 @@ const GameEngine = {
         appointmentLocation: "等待公會發布..."
     },
 
-    // 🏆 戰力階級 - 依照您的設定
     ranks: [
         { min: 101, title: "💎 SS級 神話級玩家" },
         { min: 96,  title: "🌟 S級 傳說級玩家" },
@@ -31,10 +30,8 @@ const GameEngine = {
         { min: 0,   title: "🥚 報到新手村" }
     ],
 
-    // 🛡️ 防具進化路徑
     armorPath: ['👕 粗製布衣', '🧥 強化布衫', '🥋 實習皮甲', '🦺 輕型鎖甲', '🛡️ 鋼鐵重甲', '💠 秘銀胸甲', '🛡️ 聖光戰鎧', '🌟 永恆守護鎧'],
     
-    // ⚔️ 武器進化路徑
     weaponPaths: {
         '🗡️ 精鋼短劍': '⚔️ 騎士長劍', '⚔️ 騎士長劍': '⚔️ 破甲重劍', '⚔️ 破甲重劍': '🗡️ 聖光戰劍', '🗡️ 聖光戰劍': '👑 王者之聖劍',
         '🏹 獵人短弓': '🏹 精靈長弓', '🏹 精靈長弓': '🏹 迅雷連弓', '🏹 迅雷連弓': '🏹 追風神弓', '🏹 追風神弓': '☄️ 破曉流星弓',
@@ -76,7 +73,7 @@ const GameEngine = {
             }
             @keyframes shinyUpdate {
                 0% { filter: brightness(1); transform: scale(1); }
-                50% { filter: brightness(2.5); transform: scale(1.1); color: #4ade80; text-shadow: 0 0 15px #4ade80; }
+                50% { filter: brightness(2.5); transform: scale(1.15); color: #4ade80; text-shadow: 0 0 15px #4ade80; }
                 100% { filter: brightness(1); transform: scale(1); }
             }
             .shiny-effect { animation: shinyUpdate 0.8s ease-in-out; display: inline-block; }
@@ -93,18 +90,20 @@ const GameEngine = {
         document.head.appendChild(style);
     },
 
-    // 💰 核心互動：大摺疊、小摺疊、隨機武器
     unlock(event, id, action) {
         if (this.state.achievements.includes(id)) return;
         
         let scoreGain = 0;
         let toastMsg = "";
         let alertMsg = "";
-        let shinyTargets = ['score-val']; // 預設閃分數數值
+        let shinyTargets = ['score-val']; 
 
         if (action === 'large_fold') {
             scoreGain = 2;
-            alertMsg = `🔔 發現隱藏關卡，冒險積分 +${scoreGain}`;
+            alertMsg = `🔔 發現隱藏關卡，冒險積分 +2`;
+        } else if (action === 'onboard_files') {
+            scoreGain = 3;
+            toastMsg = `✨ 整理重要文件，冒險積分 +3`;
         } else if (action === 'explore1') {
             scoreGain = 1;
             toastMsg = `✨ 深入探索，冒險積分+1`;
@@ -118,7 +117,7 @@ const GameEngine = {
             this.state.weaponType = w;
             this.state.items.push(w);
             toastMsg = `⚔️ 獲得武器：${w}，戰力大幅提升！`;
-            shinyTargets.push('items-val'); // 拿到武器也要閃道具欄
+            shinyTargets.push('items-val'); 
         }
 
         if (alertMsg) alert(alertMsg);
@@ -156,7 +155,7 @@ const GameEngine = {
         setTimeout(() => {
             toast.classList.remove('show');
             setTimeout(() => toast.remove(), 500);
-        }, 3000); // 🎯 3秒消失
+        }, 3000); // 3秒滑出
     },
 
     triggerShiny(targetId) {
@@ -171,22 +170,18 @@ const GameEngine = {
     save() { localStorage.setItem('hero_progress', JSON.stringify(this.state)); },
 
     updateUI() {
-        // 戰力判定 (高往低找)
         const sortedRanks = [...this.ranks].sort((a,b) => b.min - a.min);
         const rank = sortedRanks.find(r => this.state.score >= r.min) || this.ranks[this.ranks.length - 1];
 
         const rankVal = document.getElementById('rank-val');
         const locVal = document.getElementById('loc-val');
         const itemsVal = document.getElementById('items-val');
-        const statusVal = document.getElementById('status-val');
         const scoreVal = document.getElementById('score-val');
         const progVal = document.getElementById('prog-val');
 
-        // 數值更新 (變動才更新)
         if (rankVal && rankVal.innerText !== rank.title) { rankVal.innerText = rank.title; this.triggerShiny('rank-val'); }
         if (locVal && locVal.innerText !== this.state.location) { locVal.innerText = this.state.location; this.triggerShiny('loc-val'); }
         if (itemsVal) itemsVal.innerText = this.state.items.join(' ');
-        if (statusVal) statusVal.innerText = this.state.status;
         if (scoreVal) scoreVal.innerText = this.state.score + "分";
         
         const scoreFill = document.getElementById('score-fill');
@@ -203,9 +198,6 @@ const GameEngine = {
         if (progFill) progFill.style.width = currentProg + "%";
 
         this.updateDateControls();
-        const timeEl = document.getElementById('dyn-apt-time');
-        if (timeEl) timeEl.innerText = this.state.appointmentTime;
-        this.updateButtonStyles();
     },
 
     updateDateControls() {
@@ -227,7 +219,6 @@ const GameEngine = {
         const id = type === 'exam' ? 'input-exam-date' : 'input-result-date';
         const val = document.getElementById(id).value;
         if (!val) { alert("請先選擇日期！"); return; }
-        
         const confirmLock = confirm("鎖定就不能更改，確定要鎖定嗎？");
         if (!confirmLock) return;
 
@@ -240,18 +231,15 @@ const GameEngine = {
 
     completeTrial(event, trialNum) {
         if (this.state.currentTrial >= trialNum) return;
-        
         const tData = this.trialsData[trialNum];
         this.state.currentTrial = trialNum;
         this.state.location = tData.loc;
         this.state.score += tData.scoreGain;
         
-        // 🎯 升級閃爍：只有數值閃
         this.triggerShiny('loc-val');
         this.triggerShiny('items-val');
         this.triggerShiny('score-val');
 
-        // 防具進化路徑
         const currentArmor = this.state.items.find(i => this.armorPath.includes(i));
         if (currentArmor) {
             const idx = this.armorPath.indexOf(currentArmor);
@@ -259,8 +247,6 @@ const GameEngine = {
                 this.state.items = this.state.items.map(i => i === currentArmor ? this.armorPath[idx + 1] : i);
             }
         }
-
-        // 武器進化路徑 (只有拿到的人才升級)
         if (this.state.weaponType) {
             const nextW = this.weaponPaths[this.state.weaponType];
             if (nextW) {
@@ -268,7 +254,6 @@ const GameEngine = {
                 this.state.weaponType = nextW;
             }
         }
-
         this.save();
         this.updateUI();
     },
