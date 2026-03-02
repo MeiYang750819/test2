@@ -7,9 +7,9 @@
     
     <meta property="og:title" content="🛠️｜MYs系統｜新手村登入區" />
     <meta property="og:description" content="闖關冒險即將開始！詳閱任務指南並完成關卡，解鎖職場新身分！" />
-    <meta property="og:image" content="https://MeiYang7508190819.github.io/test2/assets/img1/MYs_logo_去背1.png" />
+    <meta property="og:image" content="https://MeiYang750819.github.io/test2/assets/img1/MYs_logo_去背1.png" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://MeiYang7508190819.github.io/test2/" />
+    <meta property="og:url" content="https://MeiYang750819.github.io/test2/" />
 
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="nav.css">
@@ -26,15 +26,15 @@
     </div>
 
     <div class="sticky-bar" id="block-status-1" style="top: 45px;">
-        <span id="rank-text">載入中...</span>
+        <span style="color:#fbbf24;">戰力：</span><span id="rank-val">載入中...</span>　｜　<span style="color:#fbbf24;">關卡：</span><span id="loc-val">載入中...</span>
     </div>
 
     <div class="sticky-bar" id="block-status-2" style="top: 90px;">
-        <span id="status-tag">載入中...</span>
+        <span style="color:#8ab4f8;">道具：</span><span id="items-val">載入中...</span>　｜　<span style="color:#8ab4f8;">狀態：</span><span id="status-val">載入中...</span>
     </div>
 
     <div class="sticky-bar" id="block-status-3" style="top: 135px;">
-        <span id="score-label" style="color:#ff8a8a;">🏆 冒險積分：</span><span id="score-text">0分</span>
+        <span id="score-label" style="color:#ff8a8a;">🏆 冒險積分：</span><span id="score-val">0分</span>
         <div class="progress-track">
             <div class="progress-fill" id="score-fill" style="width: 0%;"></div>
         </div>　｜　<span id="prog-label" style="color:#ff8a8a;">⚔️ 攻略進度：</span><span id="prog-val">0%</span>
@@ -73,7 +73,7 @@
 存檔雲端上傳</div>
 
                 <strong style="display: block; font-size: 14px; color: var(--details-textColor); margin-bottom: 5px;">🤖 手機系統-Android</strong>
-                <div style="white-space: pre-wrap; line-height: 1.8; font-weight: bold; color: var(--details-textColor); background: var(--sample-boxBgColor); padding: 15px; border-radius: 8px; margin-bottom: 5px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 1px 3px rgba(0,0,0,0.3);">點擊雲端硬碟
+                <div style="white-space: pre-wrap; line-height: 1.8; font-weight: bold; color: var(--details-textColor); background: var(--sample-boxBgColor); padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 1px 3px rgba(0,0,0,0.3);">點擊雲端硬碟
 ↓
 點擊＋
 ↓
@@ -145,20 +145,13 @@
     </footer>
 
     <script>
-        const fetchedData = {
-            companyName: "FIZZ FIZZ.TAIPEI", 
-            team: "外場團隊",
-            type: "兼職",
-            userName: "測試員"
-        };
-
+        const fetchedData = { companyName: "FIZZ FIZZ.TAIPEI", team: "外場團隊", type: "兼職", userName: "測試員" };
         function applyData(data) {
             document.querySelectorAll('.dyn-company').forEach(el => el.innerText = data.companyName);
             document.querySelectorAll('.dyn-team').forEach(el => el.innerText = data.team);
             document.querySelectorAll('.dyn-type').forEach(el => el.innerText = data.type);
             document.querySelectorAll('.dyn-name').forEach(el => el.innerText = data.userName);
         }
-
         function zoomImg(el) {
             const img = el.querySelector('img');
             if(img) {
@@ -166,13 +159,9 @@
                 document.getElementById('lightbox').style.display = 'flex';
             }
         }
-
-        /* 🎯 修正點：確保頂部戰力資訊與進度條同步初始化 */
         window.addEventListener('load', () => { 
             applyData(fetchedData); 
-            if (typeof GameEngine !== 'undefined') {
-                GameEngine.init(); 
-            }
+            if (typeof GameEngine !== 'undefined') { GameEngine.init(); }
         });
     </script>
 </body>
