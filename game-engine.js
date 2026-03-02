@@ -1,5 +1,5 @@
 /* ================================================================
-   【 ⚙️ GAME ENGINE - 最終完美版 】
+   【 ⚙️ GAME ENGINE - 靈魂回歸最終版 】
    ================================================================ */
 const GameEngine = {
     state: {
@@ -8,7 +8,7 @@ const GameEngine = {
         location: '⛺ 新手村',
         status: '📦 檢整裝備中',
         achievements: [],
-        weaponType: null,
+        weaponType: null, // 儲存獲得的初始武器名稱
         currentTrial: 0,
         examDate: null,      
         examDateLocked: false,
@@ -18,6 +18,7 @@ const GameEngine = {
         appointmentLocation: "等待公會發布..."
     },
 
+    // 🏆 戰力階級 - 依照您的設定
     ranks: [
         { min: 101, title: "💎 SS級 神話級玩家" },
         { min: 96,  title: "🌟 S級 傳說級玩家" },
@@ -30,7 +31,10 @@ const GameEngine = {
         { min: 0,   title: "🥚 報到新手村" }
     ],
 
+    // 🛡️ 防具進化路徑
     armorPath: ['👕 粗製布衣', '🧥 強化布衫', '🥋 實習皮甲', '🦺 輕型鎖甲', '🛡️ 鋼鐵重甲', '💠 秘銀胸甲', '🛡️ 聖光戰鎧', '🌟 永恆守護鎧'],
+    
+    // ⚔️ 武器進化路徑
     weaponPaths: {
         '🗡️ 精鋼短劍': '⚔️ 騎士長劍', '⚔️ 騎士長劍': '⚔️ 破甲重劍', '⚔️ 破甲重劍': '🗡️ 聖光戰劍', '🗡️ 聖光戰劍': '👑 王者之聖劍',
         '🏹 獵人短弓': '🏹 精靈長弓', '🏹 精靈長弓': '🏹 迅雷連弓', '🏹 迅雷連弓': '🏹 追風神弓', '🏹 追風神弓': '☄️ 破曉流星弓',
@@ -72,7 +76,7 @@ const GameEngine = {
             }
             @keyframes shinyUpdate {
                 0% { filter: brightness(1); transform: scale(1); }
-                50% { filter: brightness(1.8); transform: scale(1.05); color: #4ade80; text-shadow: 0 0 10px #4ade80; }
+                50% { filter: brightness(2.5); transform: scale(1.1); color: #4ade80; text-shadow: 0 0 15px #4ade80; }
                 100% { filter: brightness(1); transform: scale(1); }
             }
             .shiny-effect { animation: shinyUpdate 0.8s ease-in-out; display: inline-block; }
@@ -84,29 +88,29 @@ const GameEngine = {
                 box-shadow: 0 5px 15px rgba(0,0,0,0.5); font-weight: bold;
             }
             .game-toast.show { right: 20px; }
-            /* 靜態漸層進度條 */
-            .progress-fill { background: linear-gradient(90deg, #ff4d4d 0%, #fbbf24 50%, #4ade80 100%) !important; }
+            .progress-fill { background: linear-gradient(90deg, #ff4d4d 0%, #fbbf24 50%, #4ade80 100%) !important; transition: width 0.5s ease; }
         `;
         document.head.appendChild(style);
     },
 
-    // 💰 解鎖機制 (大摺疊、小摺疊、隱藏武器)
+    // 💰 核心互動：大摺疊、小摺疊、隨機武器
     unlock(event, id, action) {
         if (this.state.achievements.includes(id)) return;
         
         let scoreGain = 0;
         let toastMsg = "";
         let alertMsg = "";
-        
+        let shinyTargets = ['score-val']; // 預設閃分數數值
+
         if (action === 'large_fold') {
             scoreGain = 2;
             alertMsg = `🔔 發現隱藏關卡，冒險積分 +${scoreGain}`;
         } else if (action === 'explore1') {
             scoreGain = 1;
-            toastMsg = `✨ 深入探索，冒險積分+${scoreGain}`;
+            toastMsg = `✨ 深入探索，冒險積分+1`;
         } else if (action === 'explore2') {
             scoreGain = 1;
-            toastMsg = `🧩 探索重要情報，冒險積分 +${scoreGain}`;
+            toastMsg = `🧩 探索重要情報，冒險積分 +1`;
         } else if (action === 'random_weapon') {
             scoreGain = 5;
             const weapons = ['🗡️ 精鋼短劍', '🏹 獵人短弓', '🔱 鐵尖長槍'];
@@ -114,9 +118,10 @@ const GameEngine = {
             this.state.weaponType = w;
             this.state.items.push(w);
             toastMsg = `⚔️ 獲得武器：${w}，戰力大幅提升！`;
+            shinyTargets.push('items-val'); // 拿到武器也要閃道具欄
         }
 
-        if (alertMsg) { alert(alertMsg); }
+        if (alertMsg) alert(alertMsg);
 
         this.createFloatingText(event, `+${scoreGain}`);
         this.state.achievements.push(id);
@@ -125,7 +130,7 @@ const GameEngine = {
         
         setTimeout(() => {
             if (toastMsg) this.showToast(toastMsg);
-            this.triggerShiny();
+            shinyTargets.forEach(target => this.triggerShiny(target));
             this.updateUI();
         }, 1000);
     },
@@ -151,39 +156,49 @@ const GameEngine = {
         setTimeout(() => {
             toast.classList.remove('show');
             setTimeout(() => toast.remove(), 500);
-        }, 4000);
+        }, 3000); // 🎯 3秒消失
     },
 
-    triggerShiny() {
-        const targets = ['rank-text', 'score-text', 'status-tag'];
-        targets.forEach(id => {
-            const el = document.getElementById(id);
-            if (el) {
-                el.classList.remove('shiny-effect');
-                void el.offsetWidth;
-                el.classList.add('shiny-effect');
-            }
-        });
+    triggerShiny(targetId) {
+        const el = document.getElementById(targetId);
+        if (el) {
+            el.classList.remove('shiny-effect');
+            void el.offsetWidth;
+            el.classList.add('shiny-effect');
+        }
     },
 
     save() { localStorage.setItem('hero_progress', JSON.stringify(this.state)); },
 
     updateUI() {
-        const rank = this.ranks.find(r => this.state.score >= r.min) || this.ranks[this.ranks.length - 1];
-        const rEl = document.getElementById('rank-text');
-        const sEl = document.getElementById('status-tag');
-        if (rEl) rEl.innerHTML = `<span style="color:#fbbf24;">戰力：</span><span>${rank.title}</span>　｜　<span style="color:#fbbf24;">關卡：</span><span>${this.state.location}</span>`;
-        if (sEl) sEl.innerHTML = `<span style="color:#8ab4f8;">道具：</span><span>${this.state.items.join(' ')}</span>　｜　<span style="color:#8ab4f8;">狀態：</span><span id="dyn-status">${this.state.status}</span>`;
+        // 戰力判定 (高往低找)
+        const sortedRanks = [...this.ranks].sort((a,b) => b.min - a.min);
+        const rank = sortedRanks.find(r => this.state.score >= r.min) || this.ranks[this.ranks.length - 1];
+
+        const rankVal = document.getElementById('rank-val');
+        const locVal = document.getElementById('loc-val');
+        const itemsVal = document.getElementById('items-val');
+        const statusVal = document.getElementById('status-val');
+        const scoreVal = document.getElementById('score-val');
+        const progVal = document.getElementById('prog-val');
+
+        // 數值更新 (變動才更新)
+        if (rankVal && rankVal.innerText !== rank.title) { rankVal.innerText = rank.title; this.triggerShiny('rank-val'); }
+        if (locVal && locVal.innerText !== this.state.location) { locVal.innerText = this.state.location; this.triggerShiny('loc-val'); }
+        if (itemsVal) itemsVal.innerText = this.state.items.join(' ');
+        if (statusVal) statusVal.innerText = this.state.status;
+        if (scoreVal) scoreVal.innerText = this.state.score + "分";
         
-        const scoreEl = document.getElementById('score-text');
-        if (scoreEl) scoreEl.innerText = this.state.score + "分";
         const scoreFill = document.getElementById('score-fill');
         if (scoreFill) scoreFill.style.width = Math.min(this.state.score, 100) + "%";
 
         const baseProg = this.state.currentTrial > 0 ? this.trialsData[this.state.currentTrial].baseProg : 0;
         const currentProg = Math.min(100, baseProg + (this.state.achievements.length * 2));
-        const progVal = document.getElementById('prog-val');
-        if (progVal) progVal.innerText = currentProg + "%";
+        if (progVal && progVal.innerText !== currentProg + "%") {
+            progVal.innerText = currentProg + "%";
+            this.triggerShiny('prog-val');
+        }
+        
         const progFill = document.getElementById('prog-fill');
         if (progFill) progFill.style.width = currentProg + "%";
 
@@ -223,31 +238,39 @@ const GameEngine = {
         alert("鎖定就不能更改！");
     },
 
-    requestChange() {
-        const val = document.getElementById('input-change-date').value;
-        if (!val) return;
-        alert("🚨 已送出申請，請私訊人資承辦，核准後將為您解鎖，會因此扣分喔！");
-        const btn = document.getElementById('btn-lock-change');
-        if (btn) { btn.disabled = true; btn.innerText = "申請"; btn.style.opacity = "0.5"; }
-    },
-
-    canUnlockTrial5() {
-        if (!this.state.appointmentTime || this.state.appointmentTime.includes("等待")) return { can: false, reason: "⚠️ 尚未發布報到時間。" };
-        const now = new Date();
-        const aptDate = new Date(this.state.appointmentTime);
-        const openTime = new Date(aptDate.getFullYear(), aptDate.getMonth(), aptDate.getDate(), 8, 0, 0);
-        if (now < openTime) return { can: false, reason: `⚠️ 請於報到日 (${aptDate.toLocaleDateString()}) 08:00 後操作。` };
-        return { can: true };
-    },
-
     completeTrial(event, trialNum) {
         if (this.state.currentTrial >= trialNum) return;
-        if (trialNum === 5 && !this.canUnlockTrial5().can) { alert(this.canUnlockTrial5().reason); return; }
+        
         const tData = this.trialsData[trialNum];
         this.state.currentTrial = trialNum;
         this.state.location = tData.loc;
         this.state.score += tData.scoreGain;
-        this.save(); this.updateUI();
+        
+        // 🎯 升級閃爍：只有數值閃
+        this.triggerShiny('loc-val');
+        this.triggerShiny('items-val');
+        this.triggerShiny('score-val');
+
+        // 防具進化路徑
+        const currentArmor = this.state.items.find(i => this.armorPath.includes(i));
+        if (currentArmor) {
+            const idx = this.armorPath.indexOf(currentArmor);
+            if (idx < this.armorPath.length - 1) {
+                this.state.items = this.state.items.map(i => i === currentArmor ? this.armorPath[idx + 1] : i);
+            }
+        }
+
+        // 武器進化路徑 (只有拿到的人才升級)
+        if (this.state.weaponType) {
+            const nextW = this.weaponPaths[this.state.weaponType];
+            if (nextW) {
+                this.state.items = this.state.items.map(i => i === this.state.weaponType ? nextW : i);
+                this.state.weaponType = nextW;
+            }
+        }
+
+        this.save();
+        this.updateUI();
     },
 
     updateButtonStyles() {
