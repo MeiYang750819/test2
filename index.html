@@ -14,6 +14,21 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="nav.css">
     <script src="game-engine.js"></script>
+
+    <style>
+        /* --- 📋 基礎內文分段樣式 --- */
+        .details-body { 
+            color: #b0b0b0;              /* 文字顏色 (淺灰色) */
+            white-space: normal !important; /* 強制自動換行 */
+            line-height: 1.8;             /* 行高設定 (提升閱讀感) */
+        }
+
+        /* --- 🏅 稱號文字色彩設定 --- */
+        .text-green { color: #4ade80; }    /* 綠色 (表現良好) */
+        .text-lightblue { color: #8ab4f8; }/* 淡藍色 (有待觀察) */
+        .text-lightred { color: #ff8a8a; } /* 淡紅色 (資格重評) */
+        .text-purple { color: #a855f7; }   /* 紫色 (建議汰換) */
+    </style>
 </head>
 <body class="page-1">
 
@@ -25,31 +40,23 @@
     </div>
 
     <div class="sticky-bar" id="block-status-1" style="top: 45px;">
-        <span style="color:#fbbf24;">戰力：</span>
-        <span id="rank-val">載入中...</span>　｜　
-        <span style="color:#fbbf24;">關卡：</span>
-        <span id="loc-val">載入中...</span>
+        <span style="color:#fbbf24;">戰力：</span><span id="rank-val">載入中...</span>　｜　
+        <span style="color:#fbbf24;">關卡：</span><span id="loc-val">載入中...</span>
     </div>
 
     <div class="sticky-bar" id="block-status-2" style="top: 90px;">
-        <span style="color:#8ab4f8;">道具：</span>
-        <span id="items-val">載入中...</span>　｜　
-        <span style="color:#8ab4f8;">狀態：</span>
-        <span id="status-val">📦 檢整裝備中</span>
+        <span style="color:#8ab4f8;">道具：</span><span id="items-val">載入中...</span>　｜　
+        <span style="color:#8ab4f8;">狀態：</span><span id="status-val">📦 檢整裝備中</span>
     </div>
 
     <div class="sticky-bar" id="block-status-3" style="top: 135px;">
         <span style="color:#ff8a8a;">🏆 冒險積分：</span>
         <span id="score-val">0分</span>
-        <div class="progress-track">
-            <div class="progress-fill" id="score-fill" style="width: 0%;"></div>
-        </div>
+        <div class="progress-track"><div class="progress-fill" id="score-fill" style="width: 0%;"></div></div>
         　｜　
         <span style="color:#ff8a8a;">⚔️ 攻略進度：</span>
         <span id="prog-val">0%</span>
-        <div class="progress-track">
-            <div class="progress-fill" id="prog-fill" style="width: 0%;"></div>
-        </div>
+        <div class="progress-track"><div class="progress-fill" id="prog-fill" style="width: 0%;"></div></div>
     </div>
 
     <nav class="nav-tabs" style="top: 180px;">
@@ -69,7 +76,7 @@
                 <div class="details-body">
                     ■ 此表單僅限錄取者使用.<br>
                     ■ 若非上述身分請立即退出此表單.<br>
-                    ■ 此表所有權歸屬<span class="dyn-company">本公司</span>.
+                    ■ 此表所有權歸屬 <span class="dyn-company">本公司</span>.
                 </div>
             </details>
 
@@ -77,11 +84,11 @@
                 <summary class="sub-summary">【填寫前須知事項】</summary>
                 <div class="details-body">
                     ■ 請依照表單順序執行填寫.<br>
-                    ■ 請先閱讀後有疑問再發問,勿未查看直接詢問.<br>
+                    ■ 請先閱讀後有疑問再發問, 勿未查看直接詢問.<br>
                     ■ 填寫表單若遇到困難請向人資承辦提出職場禮貌詢問.<br>
                     ■ 上傳之個人資料悉依個資相關法令規範辦理保存.<br>
-                    ■ 每個階段未經管理員審核通過,無法解鎖下一階段.<br>
-                    ■ <span class="dyn-company">本公司</span>-此表單簡稱本公司.
+                    ■ 每個階段未經管理員審核通過, 無法解鎖下一階段.<br>
+                    ■ <span class="dyn-company">本公司</span> - 此表單簡稱本公司.
                 </div>
             </details>
         </details>
@@ -106,9 +113,7 @@
                     ❗️毋須開立.<br><br>
                     4. 若沒有帳戶是否要去臨櫃開立:<br>
                     ❗️毋須開立. 本公司與該行是薪轉戶專案,<br>
-                    將提供限定證明去辦理開戶, 須完成報到程序後給予.<br><br>
-                    5. 是否能使用別間銀行存摺:<br>
-                    ❗️不能.
+                    將提供限定證明去辦理開戶, 須完成報到程序後給予.
                 </div>
             </details>
 
@@ -118,22 +123,16 @@
                 </summary>
                 <div class="details-body">
                     1. 是否可以僅繳交一份體、健檢報告:<br>
-                    ❗️若體檢報告內有包含下列:<br>
-                    食品從業人員體檢及一般勞工體格檢查的項目,<br>
-                    那就可以僅繳交一份,但請注意！<br>
-                    食品從業人員報告年限是要今年度, 逾期請重新檢查.<br><br>
+                    ❗️若體檢報告內有包含下列: 食品從業人員體檢及一般勞工體格檢查的項目,<br>
+                    那就可以僅繳交一份, 但請注意！食品從業人員報告年限是要今年度.<br><br>
                     2. 傷寒必須要檢查.<br>
                     ❗️請重新或補做檢查項目.<br><br>
-                    3. 是否可使用之前任職公司的體檢報告:<br>
-                    ❗️回應與第一則則相同.<br><br>
-                    4. 查詢認證體檢醫院機構:<br>
+                    3. 查詢認證體檢醫院機構:<br>
                     <a href="https://hrpts.osha.gov.tw/Home/CertifiedHospInfoSearch" 
                        target="_blank" 
                        style="color:#8ab4f8; text-decoration:underline;">
                        ❗️請點擊此文字連結查詢
-                    </a><br><br>
-                    5. 體檢費用:<br>
-                    ❗️第一年自行負擔,第二年公司負責.
+                    </a>
                 </div>
             </details>
         </details>
@@ -143,15 +142,15 @@
             <summary class="main-summary" onclick="GameEngine.unlock(event, 'onboard_main', 'large_fold')">
                 🏛️ 入職報到說明
             </summary>
-
+            
             <details>
                 <summary class="sub-summary" onclick="GameEngine.unlock(event, 'onboard_sub1', 'onboard_files')">
                     【入職報到五大文件】(+3)
                 </summary>
                 <div class="details-body">
                     ■ 報到前必須準備五大文件, 當日要繳交:<br>
-                    　- 經認證醫療機構 -勞工體格檢查報告.<br>
-                    　- 經認證醫療機構 -食品從業人員體檢報告.<br>
+                    　- 經認證醫療機構 - 勞工體格檢查報告.<br>
+                    　- 經認證醫療機構 - 食品從業人員體檢報告.<br>
                     　- 兩吋照片一張.<br>
                     　- 前份工作健保轉出證明.<br>
                     　- 前份工作離職證明.<br><br>
@@ -168,14 +167,10 @@
                     1. 一般勞工體格檢查報告:<br>
                     ❗️依據《職業安全衛生法》§20 勞工健康保護規則§16~17<br>
                     ⏍ 未滿40歲, 提交的體檢報告必須在5年內.<br>
-                    ⏍ 40歲以上, 未滿65歲, 提交的體檢報告必須在3年內.<br>
-                    ⏍ 年滿65歲, 提交的體檢報告必須在1年內.<br><br>
+                    ⏍ 40歲以上, 未滿65歲, 提交的體檢報告必須在3年內.<br><br>
                     2. 食品從業人員體檢報告:<br>
-                    ❗️依據《食品安全衛生管理法》§8 食品良好衛生規範準則§5<br>
-                    檢查期限:本年度-近一年.<br><br>
-                    3. 兩吋照片一張: 用於個人資料建檔使用.<br>
-                    4. 前份工作健保轉出證明: 檢核後加保用.<br>
-                    5. 前份工作離職證明: 檢核用.
+                    ❗️依據《食品安全衛生管理法》§8 檢查期限:本年度-近一年.<br><br>
+                    3. 兩吋照片一張: 用於個人資料建檔使用.
                 </div>
             </details>
         </details>
@@ -185,14 +180,10 @@
             <summary class="main-summary">🛡️ 退件說明指南</summary>
             <div class="details-body">
                 ■ 狀態顯示說明：<br>
-                ⚔️ 狩獵裝備中 - 代表「單份資料已上傳」.<br>
-                ⚖️ 提交公會審查 - 代表「資料傳完, 等待審核」.<br>
-                ⏳ 系統鑑定中 - 代表「人資正在審核中」.<br>
-                ❌ 強化失敗 - 代表「被退件, 需重新補件」.<br><br>
-                ■ 若顯示 ❌ 強化失敗, 請修正後重新上傳:<br>
-                　- 文字模糊 (鑑定失敗) - 光線不足或對焦不準.<br>
-                　- 切到邊角 (屬性殘缺) - 文件四個角未完整入鏡.<br>
-                　- 雜物過多 (異物侵入) - 背景太亂或手指入鏡.<br><br>
+                ⚔️ 狩獵裝備中 - 單份資料已上傳.<br>
+                ⚖️ 提交公會審查 - 資料傳完, 等待審核.<br>
+                ⏳ 系統鑑定中 - 人資正在審核中.<br>
+                ❌ 強化失敗 - 被退件, 需重新補件.<br><br>
                 💡 解決方案: 請參考 🏹 鍛造秘笈 掃描重新打造.
             </div>
         </details>
@@ -203,10 +194,10 @@
             <div class="details-body">
                 <span style="color: #FFFFFF;">💎 [ 巔峰神話 ]：101分以上</span><br>
                 👑 [ 卓越表現 ]：96-100分<br>
-                <span style="color:#4ade80;">🟢 [ 表現良好 ]：80-95分</span><br>
-                <span style="color:#8ab4f8;">⚠️ [ 有待觀察 ]：60-79分</span><br>
-                <span style="color:#ff8a8a;">🛑 [ 資格重評 ]：41-59分</span><br>
-                <span style="color:#a855f7;">💀 [ 建議汰換 ]：40分以下</span>
+                <span class="text-green">🟢 [ 表現良好 ]：80-95分</span><br>
+                <span class="text-lightblue">⚠️ [ 有待觀察 ]：60-79分</span><br>
+                <span class="text-lightred">🛑 [ 資格重評 ]：41-59分</span><br>
+                <span class="text-purple">💀 [ 建議汰換 ]：40分以下</span>
             </div>
         </details>
 
@@ -214,29 +205,20 @@
 
     <footer class="footer">
         <img src="assets/MYs_logo_去背.png" alt="MYs Logo" class="footer-logo">
-        © Copyright 2026 MYs System-b1.0.0-03-02-2026-115
+        © Copyright 2026 MYs System - b1.0.0-03-02
     </footer>
 
     <script>
-        const fetchedData = { 
-            companyName: "FIZZ FIZZ.TAIPEI", 
-            team: "外場團隊", 
-            type: "兼職", 
-            userName: "測試員" 
-        };
-
+        const fetchedData = { companyName: "FIZZ FIZZ.TAIPEI", team: "外場團隊", type: "兼職", userName: "測試員" };
         function applyData(data) {
             document.querySelectorAll('.dyn-company').forEach(el => el.innerText = data.companyName);
             document.querySelectorAll('.dyn-team').forEach(el => el.innerText = data.team);
             document.querySelectorAll('.dyn-type').forEach(el => el.innerText = data.type);
             document.querySelectorAll('.dyn-name').forEach(el => el.innerText = data.userName);
         }
-
         window.addEventListener('load', () => {
             applyData(fetchedData);
-            if (typeof GameEngine !== 'undefined') {
-                GameEngine.init();
-            }
+            if (typeof GameEngine !== 'undefined') GameEngine.init();
         });
     </script>
 </body>
